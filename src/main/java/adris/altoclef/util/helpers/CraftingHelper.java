@@ -23,7 +23,11 @@ public class CraftingHelper {
             inventoryItems.add(new ItemStack(stack.getItem(), stack.getCount()));
         }
 
-        for (CraftingRecipe recipe : mod.getCraftingRecipeTracker().getRecipeForItem(item)) {
+        // the tracker has already logged a warning if this is null
+        List<CraftingRecipe> recipes = mod.getCraftingRecipeTracker().getRecipeForItem(item);
+        if (recipes == null) return false;
+
+        for (CraftingRecipe recipe : recipes) {
             if (canCraftItemNow(mod, new ArrayList<>(inventoryItems), recipe, new HashSet<>())) {
                 return true;
             }
@@ -42,7 +46,8 @@ public class CraftingHelper {
 
         itemTargetLoop:
         for (ItemTarget itemTarget : targets) {
-            if (itemTarget == ItemTarget.EMPTY) {
+            // catalogued recipes mark a blank slot with an empty target of their own, not ItemTarget.EMPTY
+            if (itemTarget.isEmpty() && !itemTarget.isCatalogueItem()) {
                 continue;
             }
 

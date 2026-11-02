@@ -19,6 +19,7 @@ public class CraftItemPriorityTask extends PriorityTask{
     public final double priority;
     public final RecipeTarget recipeTarget;
     private boolean satisfied = false;
+    private boolean warnedMissingRecipe = false;
 
     // note: bypassForceCooldown is set to true, because we usually don't want to wait when crafting
     public CraftItemPriorityTask(double priority, RecipeTarget toCraft) {
@@ -41,6 +42,8 @@ public class CraftItemPriorityTask extends PriorityTask{
 
     @Override
     public Task getTask(AltoClef mod) {
+        if (isRecipeMissing()) return null;
+
         if (recipeTarget.getRecipe().isBig()) {
             return new CraftInTableTask(recipeTarget);
         }
@@ -55,6 +58,8 @@ public class CraftItemPriorityTask extends PriorityTask{
 
     @Override
     protected double getPriority(AltoClef mod) {
+        if (isRecipeMissing()) return Double.NEGATIVE_INFINITY;
+
         if (BeatMinecraftTask.hasItem(mod, recipeTarget.getOutputItem())) {
             Debug.logInternal("THIS IS SATISFIED "+recipeTarget.getOutputItem());
             satisfied = true;
@@ -74,5 +79,15 @@ public class CraftItemPriorityTask extends PriorityTask{
 
     public boolean isSatisfied() {
         return satisfied;
+    }
+
+    private boolean isRecipeMissing() {
+        if (recipeTarget.getRecipe() != null) return false;
+
+        if (!warnedMissingRecipe) {
+            warnedMissingRecipe = true;
+            Debug.logWarning("Skipping " + this + ": no crafting recipe is known for it.");
+        }
+        return true;
     }
 }

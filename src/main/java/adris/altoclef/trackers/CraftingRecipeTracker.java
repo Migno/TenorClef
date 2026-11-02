@@ -3,6 +3,7 @@ package adris.altoclef.trackers;
 import adris.altoclef.multiversion.RecipeVer;
 
 import adris.altoclef.AltoClef;
+import adris.altoclef.TaskCatalogue;
 import adris.altoclef.multiversion.recipemanager.RecipeManagerWrapper;
 import adris.altoclef.multiversion.recipemanager.WrappedRecipeEntry;
 import adris.altoclef.util.RecipeTarget;
@@ -63,7 +64,10 @@ public class CraftingRecipeTracker extends Tracker{
         ensureUpdated();
 
         List<RecipeTarget> targets = new ArrayList<>();
-        for (adris.altoclef.util.CraftingRecipe recipe : getRecipeForItem(item)) {
+        List<adris.altoclef.util.CraftingRecipe> recipes = getRecipeForItem(item);
+        if (recipes == null) return targets;
+
+        for (adris.altoclef.util.CraftingRecipe recipe : recipes) {
             targets.add(new RecipeTarget(item, targetCount, recipe));
         }
 
@@ -111,6 +115,10 @@ public class CraftingRecipeTracker extends Tracker{
 
         //#if MC >= 12102
         //$$ // 1.21.2+: servers no longer sync recipes to the client; altoclef's own recipe catalogue is used instead.
+        //$$ TaskCatalogue.getCraftingRecipes().forEach((item, recipe) -> {
+        //$$     itemRecipeMap.put(item, List.of(recipe));
+        //$$     recipeResultMap.put(recipe, new ItemStack(item, recipe.outputCount()));
+        //$$ });
         //#else
         RecipeManagerWrapper recipeManager = RecipeManagerWrapper.of(networkHandler.getRecipeManager());
 

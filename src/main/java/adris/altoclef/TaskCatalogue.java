@@ -762,6 +762,31 @@ public class TaskCatalogue {
         return nameToResourceTask.keySet();
     }
 
+    /**
+     * The crafting recipes of every catalogued item that is crafted directly. The recipes only exist inside the
+     * catalogued tasks, so this has to build each task to read them. Other resources (mined, smelted...) are left out.
+     */
+    public static Map<Item, CraftingRecipe> getCraftingRecipes() {
+        Map<Item, CraftingRecipe> recipes = new HashMap<>();
+        for (Map.Entry<Item, CataloguedResource> entry : itemToResourceTask.entrySet()) {
+            try {
+                ResourceTask task = entry.getValue().getResource(1);
+                RecipeTarget target = null;
+                if (task instanceof CraftInTableTask craftInTableTask) {
+                    target = craftInTableTask.getRecipeTargets()[0];
+                } else if (task instanceof CraftInInventoryTask craftInInventoryTask) {
+                    target = craftInInventoryTask.getRecipeTarget();
+                }
+                if (target != null && target.getRecipe() != null) {
+                    recipes.put(entry.getKey(), target.getRecipe());
+                }
+            } catch (RuntimeException e) {
+                Debug.logWarning("Could not read the catalogued recipe of " + entry.getKey() + ": " + e);
+            }
+        }
+        return recipes;
+    }
+
     private static CataloguedResource simple(String name, Item[] matches, Function<Integer, ResourceTask> getTask) {
         return put(name, matches, getTask);
     }
