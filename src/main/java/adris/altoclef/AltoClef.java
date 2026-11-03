@@ -126,6 +126,12 @@ public class AltoClef implements ModInitializer {
             throw new IllegalStateException("AltoClef already loaded!");
         }
         instance = this;
+        // Librarian trade system: keybinds must exist before the options file is read (no-op below 26.3).
+        try {
+            adris.altoclef.tradecycle.mc.TradeMc.init();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     private static boolean loadStarted;

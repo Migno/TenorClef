@@ -1,3 +1,7 @@
+# Unreleased
+
+- **Librarian trades (`@trades`, 26.3)**: persistent per-server/dimension librarian index (`@trades scan`), through-wall overlay (key `O`) and index screen (key `P`) under Controls → TenorClef, and `@trades cycle`, which rerolls novice librarians and locks each wanted book once (optionally at the vanilla best price derived from the 26.3 trade data). See docs/TRADECYCLE.md.
+
 # TenorClef 0.26.2
 
 Pairs with Ostinato v1.19.2. A second review pass: fixes only.

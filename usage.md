@@ -18,6 +18,7 @@ Commands are prefixed with `@`. Here's a list along with their functions:
 | `status`               | Prints the status of the currently executing command. Mostly useful when running through `/msg`.                       |               |
 | `stop`                 | Forcefully stops the currently running command. The shortcut `CTRL+K` also achieves this.                              |               |
 | `test {testname}`      | Runs a "test" command. These vary, and will be described below.                                                        |               |
+| `trades {action}`     | Librarian trade index, through-wall overlay (key O), index screen (key P) and automatic reroll + lock. 26.3 only, see [docs/TRADECYCLE.md](docs/TRADECYCLE.md). | `@trades want all best`, `@trades cycle` |
 
 
 ### Notable test commands
