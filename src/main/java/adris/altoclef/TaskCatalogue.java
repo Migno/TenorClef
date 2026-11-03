@@ -883,6 +883,11 @@ public class TaskCatalogue {
     // MOB_SOURCE is declared with the other static fields. mob() below fills it.
     // Ostinato: run48 maze fill rolled rotten_flesh on peaceful; no zombies spawn, so KillAndLootTask wandered.
 
+    /** True when the catalogue gets this item by killing a mob (items crafted from drops are not counted). */
+    public static boolean isMobDrop(Item item) {
+        return MOB_SOURCE.containsKey(item);
+    }
+
     /** Ostinato: true when the item has a catalogue task AND that task can produce it in the current world. */
     public static boolean obtainableNow(Item item) {
         if (!taskExists(item)) return false;
